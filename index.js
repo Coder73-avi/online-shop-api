@@ -10,7 +10,11 @@ server.use(express.json());
 server.use(cookieParser());
 server.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://onine-shop.vercel.app",
+    ],
     credentials: true,
   })
 );
