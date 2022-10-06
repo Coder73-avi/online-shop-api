@@ -57,4 +57,8 @@ router.get("/setcookie", (req, res) => {
   res.send("Cookie have been saved successfully");
 });
 
+router.get("/", (req, res) => {
+  res.send("This is online shop api");
+});
+
 module.exports = router;
