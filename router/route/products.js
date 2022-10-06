@@ -69,7 +69,7 @@ exports.getProductById = async (req, res) => {
   } catch (error) {
     return res
       .status(400)
-      .json({ errors: `Internal Server error: ${error.message}` });
+      .json({ message: `Internal Server error: ${error.message}` });
   }
 };
 
@@ -97,7 +97,7 @@ exports.updateProduct = async (req, res) => {
   } catch (error) {
     return res
       .status(400)
-      .json({ errors: `Internal Server error: ${error.message}` });
+      .json({ message: `Internal Server error: ${error.message}` });
   }
 };
 
@@ -116,6 +116,6 @@ exports.getProductImagesById = async (req, res) => {
   } catch (error) {
     return res
       .status(400)
-      .json({ errors: `Internal Server error: ${error.message}` });
+      .json({ message: `Internal Server error: ${error.message}` });
   }
 };

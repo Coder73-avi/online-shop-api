@@ -13,7 +13,7 @@ exports.addOrder = async (req, res) => {
   } catch (error) {
     return res
       .status(400)
-      .json({ error: `Internal Server error: ${error.message}` });
+      .json({ message: `Internal Server error: ${error.message}` });
   }
 };
 
@@ -31,7 +31,7 @@ exports.getOrders = async (req, res) => {
   } catch (error) {
     return res
       .status(400)
-      .json({ error: `Internal Server error: ${error.message}` });
+      .json({ message: `Internal Server error: ${error.message}` });
   }
 };
 
@@ -50,6 +50,6 @@ exports.getOrderById = async (req, res) => {
   } catch (error) {
     return res
       .status(400)
-      .json({ error: `Internal Server error: ${error.message}` });
+      .json({ message: `Internal Server error: ${error.message}` });
   }
 };
