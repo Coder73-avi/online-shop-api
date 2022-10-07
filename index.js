@@ -13,7 +13,7 @@ server.use(
     origin: [
       "http://localhost:3000",
       "http://localhost:3001",
-      "https://onine-shop.vercel.app",
+      "https://www.onine-shop.vercel.app",
     ],
     credentials: true,
   })
