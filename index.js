@@ -14,6 +14,7 @@ server.use(
       "http://localhost:3000",
       "http://localhost:3001",
       "https://www.onine-shop.vercel.app",
+      "https://online-shop-admin.vercel.app",
     ],
     credentials: true,
   })
