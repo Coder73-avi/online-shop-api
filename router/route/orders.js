@@ -27,7 +27,7 @@ exports.getOrders = async (req, res) => {
     const [getData, _] = await Select("orders", "user__id=?", [userid]);
     if (getData.length === 0)
       return res.status(404).json({ message: `Data not found` });
-    return res.status(201).json(getData);
+    return res.status(200).json(getData);
   } catch (error) {
     return res
       .status(400)
