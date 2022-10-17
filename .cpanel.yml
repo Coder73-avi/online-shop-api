@@ -1,5 +1,0 @@
----
-deployment:
-  tasks:
-    - export DEPLOYPATH=/home/raeelapr/public_html/
-    - /bin/cp -R online-shop-api $DEPLOYPATH
