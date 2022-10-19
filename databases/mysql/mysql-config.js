@@ -44,6 +44,20 @@ exports.Update = (tablename, data, id, value) => {
   // return true;
 };
 
+exports.UpdateAll = (tablename, data) => {
+  const keys = Object.keys(data);
+  const values = Object.values(data);
+
+  let sql = `UPDATE ${tablename} SET `;
+  sql += keys.join("=?,");
+  sql += `=? `;
+
+  // const margeValue = values;
+  return db.execute(sql, values);
+  // console.log(sql);
+  // return true;
+};
+
 exports.Delete = (tablename, id, value) => {
   let sql = `DELETE FROM ${tablename} `;
   sql += ` WHERE ${id}=?`;

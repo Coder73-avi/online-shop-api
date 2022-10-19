@@ -5,6 +5,7 @@ const {
   Create,
   Select,
   Update,
+  UpdateAll,
 } = require("../../databases/mysql/mysql-config");
 
 exports.signUp = async (req, res) => {
@@ -76,12 +77,11 @@ exports.updateUser = async (req, res) => {
 
     if (req.body.hasOwnProperty("password")) {
       if (bcryptCompaire(req.body.password, getData[0].password)) {
-        req.body.password = Encryption(req.body.npassword);
-        delete req.body.npassword;
-        delete req.body.cpassword;
+        // req.body.password = Encryption(req.body.npassword);
+        delete req.body.password;
         newObj = { ...req.body };
       } else {
-        return res.status(400).json({ message: `Unauthrized ACcount` });
+        return res.status(400).json({ message: `Unauthrized Account` });
       }
     }
     // console.log(newObj);

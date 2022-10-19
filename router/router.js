@@ -41,6 +41,7 @@ const {
   getBillingAddress,
   getBillingAddressById,
   getBillingAddressByUserId,
+  activeBilingAddress,
 } = require("./route/billingaddress");
 
 // products
@@ -81,6 +82,7 @@ router.get("/getcheckouts/:userid", getCheckOutsByUserId);
 // billing address
 router.post("/addbillingaddress", authUser, addBillingAddress);
 router.patch("/updatebillingaddress/:id", authUser, updateBillingAddress);
+router.patch("/activebillingaddress/:id", activeBilingAddress);
 router.get("/billingaddress", authLogin, getBillingAddress);
 router.get("/billingaddress/:id", authLogin, getBillingAddressById);
 router.get("/getbillingaddress/:userid", authLogin, getBillingAddressByUserId);
@@ -91,7 +93,7 @@ router.get("/setcookie", (req, res) => {
     { name: "abhishek magar", age: 10 },
     process.env.SECRETKEY
   );
-  res.cookie(`token`, token);
+  res.cookie(`token`, token, { maxAge: "500000", httpOnly: true });
   res.send("Cookie have been saved successfully");
 });
 
