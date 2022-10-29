@@ -16,6 +16,7 @@ exports.authLogin = async (req, res, next) => {
     return res.status(400).json({ message: `${error.message}` });
   }
 };
+
 exports.authUser = async (req, res, next) => {
   try {
     const { token } = req.cookies;

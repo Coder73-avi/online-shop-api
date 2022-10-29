@@ -90,7 +90,7 @@ exports.updateProduct = async (req, res) => {
       });
     }
 
-    await Update("products", req.body, "id", [id]);
+    await Update("products", req.body, "id=?", [id]);
     return res
       .status(200)
       .json({ message: `Product update successfully, id: ${id}` });

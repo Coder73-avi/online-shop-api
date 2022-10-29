@@ -34,6 +34,7 @@ const {
   getCheckOuts,
   getCheckOutById,
   getCheckOutsByUserId,
+  deleteCheckOut,
 } = require("./route/checkout");
 const {
   addBillingAddress,
@@ -42,6 +43,7 @@ const {
   getBillingAddressById,
   getBillingAddressByUserId,
   activeBilingAddress,
+  getActiveBillingAddress,
 } = require("./route/billingaddress");
 
 // products
@@ -52,7 +54,7 @@ router.patch("/updateproduct/:id", uploadProductImage, updateProduct);
 router.route("/getproductimages/:product__id").get(getProductImagesById);
 
 // orders
-router.route("/addorders").post(addOrder);
+router.post("/addorders", addOrder);
 router.route("/getorders/:userid").get(getOrders);
 router.route("/getorder/:id").get(getOrderById);
 
@@ -73,19 +75,21 @@ router.route("/category/:id").get(getCategoryById);
 router.route("/deletecategory/:id").delete(deleteCategory);
 
 // checkout
-router.post("/addcheckout", addCheckOut);
-router.patch("/updatecheckout", updateCheckOut);
-router.get("/getcheckouts", getCheckOuts);
-router.get("/getcheckout/:id", getCheckOutById);
-router.get("/getcheckouts/:userid", getCheckOutsByUserId);
+router.post("/addcheckout", authUser, addCheckOut);
+router.patch("/updatecheckout", authUser, updateCheckOut);
+router.get("/getcheckouts", authLogin, getCheckOuts);
+router.get("/getcheckout/:id", authLogin, getCheckOutById);
+router.get("/getcheckouts/:userid", authLogin, getCheckOutsByUserId);
+router.delete("/deletecheckout/:id", authUser, deleteCheckOut);
 
 // billing address
 router.post("/addbillingaddress", authUser, addBillingAddress);
 router.patch("/updatebillingaddress/:id", authUser, updateBillingAddress);
-router.patch("/activebillingaddress/:id", activeBilingAddress);
+router.patch("/activebillingaddress/:id", authUser, activeBilingAddress);
 router.get("/billingaddress", authLogin, getBillingAddress);
 router.get("/billingaddress/:id", authLogin, getBillingAddressById);
 router.get("/getbillingaddress/:userid", authLogin, getBillingAddressByUserId);
+router.get("/getactivebillingaddress", authLogin, getActiveBillingAddress);
 
 // testing
 router.get("/setcookie", (req, res) => {

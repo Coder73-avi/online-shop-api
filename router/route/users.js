@@ -5,7 +5,6 @@ const {
   Create,
   Select,
   Update,
-  UpdateAll,
 } = require("../../databases/mysql/mysql-config");
 
 exports.signUp = async (req, res) => {
@@ -49,6 +48,7 @@ exports.Login = async (req, res) => {
         const expireDate = new Date(Date.now() + 60 * 60 * 24 * 7);
         res.cookie("token", token, {
           httpOnly: true,
+          secure: true,
           maxAge: expireDate,
         });
 
@@ -85,7 +85,7 @@ exports.updateUser = async (req, res) => {
       }
     }
     // console.log(newObj);
-    await Update("users", newObj, "id", [id]);
+    await Update("users", newObj, "id=?", [id]);
     return res.status(200).json({ message: "Update successfully." });
   } catch (error) {
     res.status(400).json({ message: `Internal Sever error: ${error.message}` });

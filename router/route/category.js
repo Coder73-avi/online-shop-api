@@ -58,7 +58,7 @@ exports.updateCategory = async (req, res) => {
     }
     // console.log(updateObj, req.file);
 
-    await Update("categorys", updateObj, "id", [id]);
+    await Update("categorys", updateObj, "id=?", [id]);
     return res.status(200).json({ message: `Update successfully, id: ${id}` });
   } catch (error) {
     return res

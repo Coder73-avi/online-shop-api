@@ -2,7 +2,6 @@ const {
   Create,
   Update,
   Select,
-  UpdateAll,
 } = require("../../databases/mysql/mysql-config");
 
 exports.addBillingAddress = async (req, res) => {
@@ -29,7 +28,7 @@ exports.updateBillingAddress = async (req, res) => {
         .json({ message: `Method ${req.method} is not allowed` });
 
     const updateObj = { ...req.body };
-    await Update("billing__address", updateObj, "id", [req.params.id]);
+    await Update("billing__address", updateObj, "id=?", [req.params.id]);
     return res.status(200).json({ message: `Update successfully` });
   } catch (error) {
     return res.status(400).json({ message: `Error: ${error.message}` });
@@ -47,8 +46,10 @@ exports.activeBilingAddress = async (req, res) => {
     if (getData.length == 0)
       return res.status(404).json({ message: "Billing address not found!" });
 
-    await UpdateAll("billing__address", { status: "inactive" });
-    await Update("billing__address", { status: "active" }, "id", [id]);
+    await Update("billing__address", { status: "inactive" }, "user__id=?", [
+      req.id,
+    ]);
+    await Update("billing__address", { status: "active" }, "id=?", [id]);
 
     return res.status(200).json({ message: `Update successfully` });
   } catch (error) {
@@ -85,6 +86,7 @@ exports.getBillingAddressById = async (req, res) => {
     return res.status(400).json({ message: `Error: ${error.message}` });
   }
 };
+
 exports.getBillingAddressByUserId = async (req, res) => {
   try {
     if (req.method !== "GET")
@@ -93,10 +95,28 @@ exports.getBillingAddressByUserId = async (req, res) => {
         .json({ message: `Method ${req.method} is not allowed` });
 
     const [getData, _] = await Select("billing__address", "user__id=?", [
-      req.params.userid,
+      req.id,
     ]);
     return res.status(200).json(getData);
   } catch (error) {
     return res.status(400).json({ message: `Error: ${error.message}` });
+  }
+};
+
+exports.getActiveBillingAddress = async (req, res) => {
+  try {
+    if (req.method !== "GET")
+      return res
+        .status(405)
+        .json({ message: `Method ${req.method} is not allowed` });
+
+    const id = req.id;
+    const [getData, _] = await Select("billing__address", "user__id=?", [id]);
+    const activeAddress = getData.filter(
+      (val) => val?.status?.toLowerCase() == "active"
+    );
+    return res.status(200).json(activeAddress);
+  } catch (error) {
+    return res.status(400).json({ message: `Error : ${error.message}` });
   }
 };
