@@ -16,11 +16,21 @@ exports.signUp = async (req, res) => {
     // validation
     const hashPwd = Encryption(req.body.password);
     req.body.password = hashPwd;
-    const newObj = { id: uid(16), ...req.body };
+    const id = uid(16);
+    const newObj = { id, ...req.body };
     delete newObj.cpassword;
     // console.log(newObj);
 
     await Create("users", newObj);
+    const token = jwt.sign({ id }, process.env.SECRETKEY, {
+      expiresIn: "8d",
+    });
+    const expireDate = new Date(Date.now() + 60 * 60 * 24 * 7);
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      maxAge: expireDate,
+    });
     res.status(201).json({ message: "Sign in successfully." });
   } catch (error) {
     res.status(400).json({ message: `Internal Sever error: ${error.message}` });

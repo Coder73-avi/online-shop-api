@@ -45,10 +45,19 @@ const {
   activeBilingAddress,
   getActiveBillingAddress,
 } = require("./route/billingaddress");
+const {
+  addWishlist,
+  updateWishlist,
+  getWishlists,
+  getWishlistById,
+  getWishlistsByUserId,
+} = require("./route/wishlist");
 
 // products
 router.post("/addproduct", uploadProductImage, addProduct);
 router.route("/getproducts").get(getProducts);
+router.route("/getproducts/:page").get(getProducts);
+
 router.route("/getproduct/:id").get(getProductById);
 router.patch("/updateproduct/:id", uploadProductImage, updateProduct);
 router.route("/getproductimages/:product__id").get(getProductImagesById);
@@ -81,6 +90,14 @@ router.get("/getcheckouts", authLogin, getCheckOuts);
 router.get("/getcheckout/:id", authLogin, getCheckOutById);
 router.get("/getcheckouts/:userid", authLogin, getCheckOutsByUserId);
 router.delete("/deletecheckout/:id", authUser, deleteCheckOut);
+
+// wishlist
+router.post("/addwishlist", authUser, addWishlist);
+router.patch("/updatewishlist", authUser, updateWishlist);
+router.get("/getwishlists", authLogin, getWishlists);
+router.get("/getwishlist/:id", authLogin, getWishlistById);
+router.get("/getwishlists/:userid", authLogin, getWishlistsByUserId);
+router.delete("/deletewishlist/:id", authUser, deleteCheckOut);
 
 // billing address
 router.post("/addbillingaddress", authUser, addBillingAddress);

@@ -3,6 +3,7 @@ const {
   Create,
   Select,
   Update,
+  Count,
 } = require("../../databases/mysql/mysql-config");
 const multer = require("multer");
 const { storage, imageFilter } = require("../../controller/multerStorage");
@@ -47,8 +48,24 @@ exports.getProducts = async (req, res) => {
         .status(405)
         .json({ message: `Method ${req.method} is not allowed` });
 
-    const [getData, _] = await Select("products");
-    return res.status(200).json(getData);
+    let offSet = 0;
+    const noOfRecords = 10;
+
+    if (req?.params?.hasOwnProperty("page")) {
+      const { page } = req.params;
+      offSet = Math.floor(noOfRecords * page - noOfRecords);
+    }
+    // console.log(offSet, noOfRecords);
+    const [getData, _] = await Select("products", null, null, {
+      offSet,
+      noOfRecords,
+    });
+    if (getData?.length == 0)
+      return res.status(404).json({ message: "Page not found" });
+
+    const [count, __] = await Count("products");
+    const paginationNum = Math.ceil(count[0].count / noOfRecords);
+    return res.status(200).json({ getData, paginationNum });
   } catch (error) {
     return res
       .status(400)
@@ -85,7 +102,7 @@ exports.updateProduct = async (req, res) => {
       req.files?.map(async (val) => {
         const name = val.filename;
         const fileObj = { name, url: "products/" + name, product__id: id };
-        console.log(fileObj);
+        // console.log(fileObj);
         await Create("product__images", fileObj);
       });
     }

@@ -26,16 +26,25 @@ exports.MultipleRowCreate = (tablename, keys, values) => {
   return db.query(sql, values);
 };
 
-exports.Select = (tablename, where = null, value = null, order = null) => {
+exports.Select = (
+  tablename,
+  where = null,
+  value = null,
+  limit = null,
+  order = null
+) => {
   let sql = "SELECT * FROM " + tablename;
   if (where !== null) {
     sql += ` WHERE ${where}`;
+  }
+  if (limit !== null) {
+    sql += ` LIMIT ${limit?.offSet}, ${limit?.noOfRecords}`;
   }
   if (order !== null) {
     sql += ` ORDER BY ${order}`;
   }
 
-  // console.log(sql);
+  // console.log(sql); 
   return db.execute(sql, value);
 };
 
