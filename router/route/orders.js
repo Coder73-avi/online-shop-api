@@ -49,7 +49,7 @@ exports.addOrder = async (req, res) => {
     const values = addMoreInfo.map((val) => Object.values(val));
 
     await MultipleRowCreate("orders", keys, [values]);
-    await Delete("checkout", "user__id", [req.body[0]?.user__id]);
+    await Delete("checkout", "user__id=?", [req.body[0]?.user__id]);
     // return res.status(201).json({ keys, values });
     return res.status(201).json({ message: `Ordered successfully.` });
   } catch (error) {

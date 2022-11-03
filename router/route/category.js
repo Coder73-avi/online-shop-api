@@ -115,7 +115,7 @@ exports.deleteCategory = async (req, res) => {
       "public/categorysbg",
       "categorybg/"
     );
-    await Delete("categorys", "id", [id]);
+    await Delete("categorys", "id=?", [id]);
     res.status(200).json({ message: `Delete successfully.` });
   } catch (error) {
     res

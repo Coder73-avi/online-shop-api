@@ -44,7 +44,7 @@ exports.Select = (
     sql += ` ORDER BY ${order}`;
   }
 
-  // console.log(sql); 
+  // console.log(sql);
   return db.execute(sql, value);
 };
 
@@ -91,8 +91,8 @@ exports.UpdateAll = (tablename, data) => {
 
 exports.Delete = (tablename, id, value) => {
   let sql = `DELETE FROM ${tablename} `;
-  sql += ` WHERE ${id}=?`;
-  // console.log(sql);
+  sql += ` WHERE ${id}`;
+  // console.log(sql, value);
   return db.execute(sql, value);
   // return true;
 };

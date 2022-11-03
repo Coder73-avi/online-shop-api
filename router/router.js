@@ -8,6 +8,7 @@ const {
   getProductById,
   getProductImagesById,
   updateProduct,
+  getProductsByCategory,
 } = require("./route/products");
 const {
   signUp,
@@ -51,6 +52,7 @@ const {
   getWishlists,
   getWishlistById,
   getWishlistsByUserId,
+  deleteWishlist,
 } = require("./route/wishlist");
 
 // products
@@ -61,6 +63,7 @@ router.route("/getproducts/:page").get(getProducts);
 router.route("/getproduct/:id").get(getProductById);
 router.patch("/updateproduct/:id", uploadProductImage, updateProduct);
 router.route("/getproductimages/:product__id").get(getProductImagesById);
+router.route("/getproductsbycategory/:category").get(getProductsByCategory);
 
 // orders
 router.post("/addorders", addOrder);
@@ -97,7 +100,7 @@ router.patch("/updatewishlist", authUser, updateWishlist);
 router.get("/getwishlists", authLogin, getWishlists);
 router.get("/getwishlist/:id", authLogin, getWishlistById);
 router.get("/getwishlists/:userid", authLogin, getWishlistsByUserId);
-router.delete("/deletewishlist/:id", authUser, deleteCheckOut);
+router.delete("/deletewishlist/:id", authUser, deleteWishlist);
 
 // billing address
 router.post("/addbillingaddress", authUser, addBillingAddress);

@@ -99,7 +99,7 @@ exports.deleteCheckOut = async (req, res) => {
         .status(405)
         .json({ message: `Method ${req.method} is not allowed` });
 
-    await Delete("checkout", "id", [req.params?.id]);
+    await Delete("checkout", "id=?", [req.params?.id]);
     return res
       .status(200)
       .json({ message: `Delete Succesfully, Id: ${req.params?.id}` });

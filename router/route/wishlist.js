@@ -89,7 +89,10 @@ exports.deleteWishlist = async (req, res) => {
         .status(405)
         .json({ message: `Method ${req.method} is not allowed` });
 
-    await Delete("wishlist", "id", [req.params?.id]);
+    await Delete("wishlist", "product__id=?&&user__id=?", [
+      req.params?.id,
+      req.id,
+    ]);
     return res
       .status(200)
       .json({ message: `Delete Succesfully, Id: ${req.params?.id}` });
