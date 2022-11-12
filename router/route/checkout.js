@@ -43,6 +43,11 @@ exports.updateCheckOut = async (req, res) => {
       return res
         .status(405)
         .json({ message: `Method ${req.method} is not allowed` });
+    await Update("checkout", req.body, "id=?&&user__id=?", [
+      req.params?.id,
+      req.id,
+    ]);
+    return res.status(200).json({ message: `Update successfully` });
   } catch (error) {
     res.status(400).json({ message: `Error: ${error.message}` });
   }
@@ -73,6 +78,8 @@ exports.getCheckOuts = async (req, res) => {
       );
       newData.push({
         ...data[0],
+        id: getData[i].id,
+        qty: getData[i].qty,
         product__option: getData[i].product__option,
       });
     }
@@ -123,7 +130,7 @@ exports.deleteCheckOut = async (req, res) => {
       return res
         .status(405)
         .json({ message: `Method ${req.method} is not allowed` });
-
+    // console.log(req.params.id);
     await Delete("checkout", "id=?", [req.params?.id]);
     return res
       .status(200)

@@ -120,7 +120,7 @@ router.route("/deletecategory/:id").delete(deleteCategory);
 
 // checkout
 router.post("/addcheckout", authUser, addCheckOut);
-router.patch("/updatecheckout", authUser, updateCheckOut);
+router.patch("/updatecheckout/:id", authUser, updateCheckOut);
 router.get("/getcheckouts", authLogin, getCheckOuts);
 router.get("/getcheckout/:id", authLogin, getCheckOutById);
 router.get("/getcheckouts/:userid", authLogin, getCheckOutsByUserId);

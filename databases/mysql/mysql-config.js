@@ -12,7 +12,7 @@ exports.Create = (tablename, data) => {
   }
   sql += "?)";
 
-  console.log(sql);
+  // console.log(sql);
 
   return db.execute(sql, values);
 };
