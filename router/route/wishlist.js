@@ -1,4 +1,5 @@
 const { uid } = require("uid");
+const { getDataWithImages } = require("../../controller/getDataWithImages");
 const {
   Create,
   Select,
@@ -42,8 +43,24 @@ exports.getWishlists = async (req, res) => {
         .status(405)
         .json({ message: `Method ${req.method} is not allowed` });
 
-    const [getData, _] = await Select("wishlist", "user__id=?", [req.id]);
-    return res.status(200).json(getData);
+    const [data, _] = await Select("wishlist", "user__id=?", [req.id]);
+    const newData = [];
+    for (let i = 0; i < data.length; i++) {
+      const getData = await getDataWithImages(
+        req,
+        {
+          tablename: "products__list",
+          where: "pid=?",
+          data: [data[i].product__id],
+          orders: null,
+          limit: null,
+        },
+        { imagetable: "product__images" }
+      );
+      newData.push({ ...getData[0], product__option: data[i].product__option });
+    }
+
+    return res.status(200).json(newData);
   } catch (error) {
     res.status(400).json({ message: `Error: ${error.message}` });
   }

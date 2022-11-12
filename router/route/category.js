@@ -22,7 +22,7 @@ exports.addCategory = async (req, res) => {
     const file = req.file;
     if (file) imagesrc = "categorysbg/" + file.filename;
     let newObj = { ...req.body, imagesrc, date: new Date() };
-    // console.log(file, req.body); 
+    // console.log(file, req.body);
 
     await Create("categorys", newObj);
     return res.status(201).json({ message: `Add successfully.` });
@@ -75,7 +75,17 @@ exports.getCategorys = async (req, res) => {
         .json({ message: `Method ${req.method} is not allowed` });
 
     const [getData, _] = await Select("categorys");
-    return res.status(200).json(getData);
+
+    const host = "http://" + req.headers.host + "/";
+    const newData = getData.map((item) => {
+      if (item.imagesrc !== "" && typeof item.imagesrc !== "object") {
+        item.imagesrc = host + item.imagesrc;
+      } else {
+        item.imagesrc = "";
+      }
+      return item;
+    });
+    return res.status(200).json(newData);
   } catch (error) {
     return res
       .status(400)
@@ -92,7 +102,17 @@ exports.getCategoryById = async (req, res) => {
 
     const { id } = req.params;
     const [getData, _] = await Select("categorys", "id=?", [id]);
-    return res.status(200).json(getData);
+
+    const host = "http://" + req.headers.host + "/";
+    const newData = getData.map((item) => {
+      if (item.imagesrc !== "" && typeof item.imagesrc !== "object") {
+        item.imagesrc = host + item.imagesrc;
+      } else {
+        item.imagesrc = "";
+      }
+      return item;
+    });
+    return res.status(200).json(newData);
   } catch (error) {
     return res
       .status(400)

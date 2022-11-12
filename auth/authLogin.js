@@ -1,14 +1,20 @@
 const jwt = require("jsonwebtoken");
 
 exports.authLogin = async (req, res, next) => {
-  try {
-    if (req.method !== "GET")
-      return res
-        .status(405)
-        .json({ message: `Method ${req.method} is not allowed` });
+  if (req.method !== "GET") {
+    return res
+      .status(405)
+      .json({ message: `Method ${req.method} is not allowed` });
+  }
+  // console.log(req.cookies);
 
-    const { token } = req.cookies;
-    const data = jwt.verify(token, process.env.SECRETKEY);
+  return this.authUser(req, res, next);
+};
+
+exports.authUser = async (req, res, next) => {
+  try {
+    const { auth } = req.cookies;
+    const data = jwt.verify(auth, process.env.SECRETKEY);
     req.id = data?.id;
 
     next();
@@ -17,13 +23,8 @@ exports.authLogin = async (req, res, next) => {
   }
 };
 
-exports.authUser = async (req, res, next) => {
+exports.authAdmin = async (req, res, next) => {
   try {
-    const { token } = req.cookies;
-    const data = jwt.verify(token, process.env.SECRETKEY);
-    req.id = data?.id;
-
-    next();
   } catch (error) {
     return res.status(400).json({ message: `${error.message}` });
   }

@@ -12,7 +12,7 @@ exports.Create = (tablename, data) => {
   }
   sql += "?)";
 
-  // console.log(sql);
+  console.log(sql);
 
   return db.execute(sql, values);
 };
@@ -30,18 +30,18 @@ exports.Select = (
   tablename,
   where = null,
   value = null,
-  limit = null,
-  order = null
+  order = null,
+  limit = null
 ) => {
   let sql = "SELECT * FROM " + tablename;
   if (where !== null) {
     sql += ` WHERE ${where}`;
   }
-  if (limit !== null) {
-    sql += ` LIMIT ${limit?.offSet}, ${limit?.noOfRecords}`;
-  }
   if (order !== null) {
     sql += ` ORDER BY ${order}`;
+  }
+  if (limit !== null) {
+    sql += ` LIMIT ${limit?.offSet}, ${limit?.noOfRecords}`;
   }
 
   // console.log(sql);
@@ -57,7 +57,7 @@ exports.SelectAnd = (tablename, where = null, value = null, order = null) => {
     sql += ` ORDER BY ${order}`;
   }
 
-  // console.log(sql);
+  console.log(sql);
   return db.execute(sql, value);
 };
 

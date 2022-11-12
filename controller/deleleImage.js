@@ -7,7 +7,6 @@ exports.deleteImageFile = async (tablename, id, name, dest, replaceName) => {
   const imageList = fs.readdirSync(dest);
   if (oldFilePath !== null && oldFilePath !== undefined) {
     const findImageName = oldFilePath.replace(replaceName, "");
-
     if (imageList.includes(findImageName)) {
       return fs.unlinkSync("public/" + oldFilePath);
     }

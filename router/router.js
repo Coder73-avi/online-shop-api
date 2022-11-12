@@ -1,5 +1,13 @@
 const express = require("express");
-const { addOrder, getOrders, getOrderById } = require("./route/orders");
+const url = require("url");
+const {
+  addOrder,
+  getOrders,
+  getOrderById,
+  getAllOrders,
+  updateOrders,
+  getOrdersHistory,
+} = require("./route/orders");
 const router = express.Router();
 const {
   getProducts,
@@ -9,6 +17,10 @@ const {
   getProductImagesById,
   updateProduct,
   getProductsByCategory,
+  deteProductImage,
+  deleteProduct,
+  totalProduct,
+  topSellingProduct,
 } = require("./route/products");
 const {
   signUp,
@@ -54,21 +66,40 @@ const {
   getWishlistsByUserId,
   deleteWishlist,
 } = require("./route/wishlist");
+const { createProduct, uploadTestImage } = require("./route/testroute");
+const { productValidation } = require("../controller/produuctValidation");
+const { getStaticData } = require("./route/staticData");
+const { getSalesChartData } = require("./route/salesChartData");
+const { forReviews } = require("./route/reviews");
 
 // products
-router.post("/addproduct", uploadProductImage, addProduct);
+router.post("/addproduct", uploadProductImage, productValidation, addProduct);
+// router.route("/getproducts").get(getProducts);
 router.route("/getproducts").get(getProducts);
-router.route("/getproducts/:page").get(getProducts);
+router.route("/getproducts/:noofproduct").get(getProducts);
+router.route("/getproducts/:noofproduct/:page").get(getProducts);
+router.get("/totalproduct", totalProduct);
 
-router.route("/getproduct/:id").get(getProductById);
-router.patch("/updateproduct/:id", uploadProductImage, updateProduct);
+router.route("/getproduct/:pid").get(getProductById);
+router.patch(
+  "/updateproduct/:id",
+  productValidation,
+  uploadProductImage,
+  updateProduct
+);
+router.route("/deleteproduct/:pid").delete(deleteProduct);
 router.route("/getproductimages/:product__id").get(getProductImagesById);
 router.route("/getproductsbycategory/:category").get(getProductsByCategory);
+router.route("/deleteproductimage/:id").delete(deteProductImage);
+router.route("/topsellingproduct").get(topSellingProduct);
 
 // orders
-router.post("/addorders", addOrder);
-router.route("/getorders/:userid").get(getOrders);
-router.route("/getorder/:id").get(getOrderById);
+router.post("/addorders", authUser, addOrder);
+router.get("/getallorders", getAllOrders);
+router.patch("/updateorders/:collectionid", updateOrders);
+router.get("/getorders/", authLogin, getOrders);
+router.route("/getorderscollection/:collectionid").get(getOrderById);
+router.get("/getorderhistory/:totalpage", getOrdersHistory);
 
 // users
 router.route("/signup").post(signUp);
@@ -76,6 +107,7 @@ router.post("/login", Login);
 router.patch("/updateuser/:id", updateUser);
 router.get("/getusers", getUsers);
 router.get("/getuser", authLogin, getUserById);
+router.get("/getuser/:id", getUserById);
 // router.get("/getuser/:id", authLogin, getUserById);
 router.get("/logout", logOutUser);
 
@@ -107,11 +139,21 @@ router.post("/addbillingaddress", authUser, addBillingAddress);
 router.patch("/updatebillingaddress/:id", authUser, updateBillingAddress);
 router.patch("/activebillingaddress/:id", authUser, activeBilingAddress);
 router.get("/billingaddress", authLogin, getBillingAddress);
-router.get("/billingaddress/:id", authLogin, getBillingAddressById);
+router.get("/billingaddress/:id", getBillingAddressById);
 router.get("/getbillingaddress/:userid", authLogin, getBillingAddressByUserId);
 router.get("/getactivebillingaddress", authLogin, getActiveBillingAddress);
 
+// other routes
+router.get("/getstaticdata", getStaticData);
+router.get("/getordersdata", getSalesChartData);
+
+// for product Reivews routes
+router.get("/forreviews", authLogin, forReviews);
+
 // testing
+
+router.post("/testroute", uploadTestImage, productValidation, createProduct);
+
 router.get("/setcookie", (req, res) => {
   const token = jwt.sign(
     { name: "abhishek magar", age: 10 },

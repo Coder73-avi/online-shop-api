@@ -26,12 +26,15 @@ exports.signUp = async (req, res) => {
       expiresIn: "8d",
     });
     const expireDate = new Date(Date.now() + 60 * 60 * 24 * 7);
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      maxAge: expireDate,
-    });
-    res.status(201).json({ message: "Sign in successfully." });
+
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   secure: true,
+    //   maxAge: expireDate,
+    //   domain: "onine-shop.vercel.app",
+    //   sameSite: "strict",
+    // });
+    res.status(201).json({ message: "Sign in successfully.", token });
   } catch (error) {
     res.status(400).json({ message: `Internal Sever error: ${error.message}` });
   }
@@ -56,11 +59,11 @@ exports.Login = async (req, res) => {
           expiresIn: "8d",
         });
         const expireDate = new Date(Date.now() + 60 * 60 * 24 * 7);
-        res.cookie("token", token, {
-          httpOnly: true,
-          secure: true,
-          maxAge: expireDate,
-        });
+        // res.cookie("token", token, {
+        //   httpOnly: true,
+        //   secure: true,
+        //   maxAge: expireDate,
+        // });
 
         return res.status(200).json({ message: "Login successfully.", token });
       }
@@ -126,7 +129,6 @@ exports.logOutUser = async (req, res) => {
         .status(405)
         .json({ message: `Method ${req.method} is not allowed` });
 
-    res.clearCookie("token");
     res.status(200).end();
   } catch (error) {
     res.status(400).json({ message: `Internal Error: ${error.message}` });
@@ -140,7 +142,7 @@ exports.getUserById = async (req, res) => {
         .status(405)
         .json({ message: `Method ${req.method} is not allowed` });
     // validation
-    const id = req.id;
+    const id = req?.id || req.params?.id;
     const [getData, _] = await Select("users", "id=?", [id]);
     if (getData.length === 0)
       return res.status(404).json({ message: `User Not found` });

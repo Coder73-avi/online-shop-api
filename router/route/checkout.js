@@ -1,4 +1,5 @@
 const { uid } = require("uid");
+const { getDataWithImages } = require("../../controller/getDataWithImages");
 const {
   Create,
   Select,
@@ -35,6 +36,7 @@ exports.addCheckOut = async (req, res) => {
     res.status(400).json({ message: `Error: ${error.message}` });
   }
 };
+
 exports.updateCheckOut = async (req, res) => {
   try {
     if (req.method !== "PATCH")
@@ -45,6 +47,7 @@ exports.updateCheckOut = async (req, res) => {
     res.status(400).json({ message: `Error: ${error.message}` });
   }
 };
+
 exports.getCheckOuts = async (req, res) => {
   try {
     if (req.method !== "GET")
@@ -52,12 +55,34 @@ exports.getCheckOuts = async (req, res) => {
         .status(405)
         .json({ message: `Method ${req.method} is not allowed` });
 
-    const [getData, _] = await Select("checkout");
-    return res.status(200).json(getData);
+    const [getData, _] = await Select("checkout", "user__id=?", [req.id]);
+
+    const newData = [];
+
+    for (let i = 0; i < getData.length; i++) {
+      const data = await getDataWithImages(
+        req,
+        {
+          tablename: "products__list",
+          where: "pid=?",
+          data: [getData[i].product__id],
+          orders: null,
+          limit: null,
+        },
+        { imagetable: "product__images" }
+      );
+      newData.push({
+        ...data[0],
+        product__option: getData[i].product__option,
+      });
+    }
+
+    return res.status(200).json(newData);
   } catch (error) {
     res.status(400).json({ message: `Error: ${error.message}` });
   }
 };
+
 exports.getCheckOutById = async (req, res) => {
   try {
     if (req.method !== "GET")
