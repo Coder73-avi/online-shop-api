@@ -220,7 +220,21 @@ exports.getProductsByCategory = async (req, res) => {
         .json({ message: `Method ${req.method} is not allowed` });
 
     const { category } = req.params;
-    const [getData, _] = await Select("products", "category=?", [category]);
+    const getData = await getDataWithImages(
+      req,
+      {
+        tablename: "products__list",
+        where: "category=?",
+        data: [category],
+        orders: null,
+        limit: null,
+      },
+      {
+        imagetable: "product__images",
+      },
+      true
+    );
+
     return res.status(200).json(getData);
   } catch (error) {
     return res
