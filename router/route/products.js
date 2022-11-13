@@ -328,3 +328,29 @@ exports.topSellingProduct = async (req, res) => {
     return res.status(400).json({ message: `Error: ${error.message}` });
   }
 };
+
+exports.getAllImages = async (req, res) => {
+  try {
+    if (req.method !== "GET")
+      return res
+        .status(405)
+        .json({ message: `Method ${req.method} is not allowed` });
+
+    const [getImages, _0] = await Select("product__images");
+    const hostUrl = "http://" + req.headers.host + "/";
+    const allImages = [];
+
+    for (let i = 0; i < getImages.length; i++) {
+      const id = getImages[i]?.id;
+      const product__id = getImages[i]?.product__id;
+      const url = hostUrl + getImages[i]?.url;
+      const originalname = getImages[i]?.originalname;
+
+      allImages.push({ id, product__id, url, originalname });
+    }
+
+    return res.status(200).json(allImages);
+  } catch (error) {
+    return res.status(405).json({ message: `Error: ${error.message} ` });
+  }
+};

@@ -21,6 +21,7 @@ const {
   deleteProduct,
   totalProduct,
   topSellingProduct,
+  getAllImages,
 } = require("./route/products");
 const {
   signUp,
@@ -92,6 +93,7 @@ router.route("/getproductimages/:product__id").get(getProductImagesById);
 router.route("/getproductsbycategory/:category").get(getProductsByCategory);
 router.route("/deleteproductimage/:id").delete(deteProductImage);
 router.route("/topsellingproduct").get(topSellingProduct);
+router.get("/getallimages", getAllImages);
 
 // orders
 router.post("/addorders", authUser, addOrder);
