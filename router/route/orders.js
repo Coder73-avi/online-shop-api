@@ -86,6 +86,7 @@ exports.getOrders = async (req, res) => {
         imageSrc = url + image[0].url;
         originalname = image[0].originalname;
       }
+
       newData.push({ ...getData[i], imageSrc, originalname });
     }
     return res.status(200).json(newData);

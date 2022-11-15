@@ -71,7 +71,11 @@ const { createProduct, uploadTestImage } = require("./route/testroute");
 const { productValidation } = require("../controller/produuctValidation");
 const { getStaticData } = require("./route/staticData");
 const { getSalesChartData } = require("./route/salesChartData");
-const { forReviews } = require("./route/reviews");
+const {
+  addReviews,
+  getReviews,
+  getReviewForProduct,
+} = require("./route/reviews");
 
 // products
 router.post("/addproduct", uploadProductImage, productValidation, addProduct);
@@ -150,7 +154,9 @@ router.get("/getstaticdata", getStaticData);
 router.get("/getordersdata", getSalesChartData);
 
 // for product Reivews routes
-router.get("/forreviews", authLogin, forReviews);
+router.get("/getreviews", getReviews);
+router.post("/addreview", authUser, addReviews);
+router.get("/getreviews/:productid", getReviewForProduct);
 
 // testing
 
