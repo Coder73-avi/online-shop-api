@@ -3,6 +3,7 @@ const { Select } = require("../databases/mysql/mysql-config");
 exports.getDataWithImages = async (req, data1, data2, allImage = false) => {
   try {
     const { tablename, where, data, orders } = data1;
+    const like = data1?.like || null;
     const { imagetable } = data2;
     let limit = null;
     if (data1.hasOwnProperty("limit")) {
@@ -13,7 +14,14 @@ exports.getDataWithImages = async (req, data1, data2, allImage = false) => {
       }
     }
 
-    const [getData, ___] = await Select(tablename, where, data, orders, limit);
+    const [getData, ___] = await Select(
+      tablename,
+      where,
+      data,
+      orders,
+      limit,
+      like
+    );
 
     const newArr = [];
     let newResult = [];

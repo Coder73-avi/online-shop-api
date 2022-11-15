@@ -31,7 +31,8 @@ exports.Select = (
   where = null,
   value = null,
   order = null,
-  limit = null
+  limit = null,
+  like = null
 ) => {
   let sql = "SELECT * FROM " + tablename;
   if (where !== null) {
@@ -42,6 +43,9 @@ exports.Select = (
   }
   if (limit !== null) {
     sql += ` LIMIT ${limit?.offSet}, ${limit?.noOfRecords}`;
+  }
+  if (like !== null) {
+    sql += ` LIKE '${like}'`;
   }
 
   // console.log(sql);

@@ -22,6 +22,7 @@ const {
   totalProduct,
   topSellingProduct,
   getAllImages,
+  searchProducts,
 } = require("./route/products");
 const {
   signUp,
@@ -92,12 +93,14 @@ router.patch(
   uploadProductImage,
   updateProduct
 );
+
 router.route("/deleteproduct/:pid").delete(deleteProduct);
 router.route("/getproductimages/:product__id").get(getProductImagesById);
 router.route("/getproductsbycategory/:category").get(getProductsByCategory);
 router.route("/deleteproductimage/:id").delete(deteProductImage);
 router.route("/topsellingproduct").get(topSellingProduct);
 router.get("/getallimages", getAllImages);
+router.get("/searchproducts/:keywords", searchProducts);
 
 // orders
 router.post("/addorders", authUser, addOrder);
