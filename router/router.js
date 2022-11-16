@@ -76,6 +76,7 @@ const {
   addReviews,
   getReviews,
   getReviewForProduct,
+  getReviewsForUser,
 } = require("./route/reviews");
 
 // products
@@ -160,6 +161,7 @@ router.get("/getordersdata", getSalesChartData);
 router.get("/getreviews", getReviews);
 router.post("/addreview", authUser, addReviews);
 router.get("/getreviews/:productid", getReviewForProduct);
+router.get("/getreviewsforuser", authLogin, getReviewsForUser);
 
 // testing
 
