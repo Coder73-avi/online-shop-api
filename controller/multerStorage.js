@@ -15,13 +15,13 @@ exports.storage = (dest) => {
 };
 
 exports.imageFilter = (req, file, cb) => {
-  const filetypes = /jpg|jpeg|gif|webp|tif|png|tif|tiff|bmp|esp/;
+  const filetypes = /jpg|jpeg|gif|webp|tif|png|tif|tiff|bmp|esp|svg/;
   const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
   const mimetype = filetypes.test(file.mimetype);
   if (extname && mimetype) {
     return cb(null, true);
   }
   return cb(
-    `Error: Upload Image file only (jpg, jpeg, gif, webp, tif, png, tif,tiff, bmp, esp)`
+    `Error: Upload Image file only (jpg, jpeg, gif, webp, tif, png, tif,tiff, bmp, esp, svg)`
   );
 };

@@ -77,7 +77,15 @@ const {
   getReviews,
   getReviewForProduct,
   getReviewsForUser,
+  updateReviewStatus,
 } = require("./route/reviews");
+const {
+  uploadBrandImage,
+  addBrands,
+  getBrands,
+  deleteBrands,
+  getBrandById,
+} = require("./route/brands");
 
 // products
 router.post("/addproduct", uploadProductImage, productValidation, addProduct);
@@ -159,9 +167,19 @@ router.get("/getordersdata", getSalesChartData);
 
 // for product Reivews routes
 router.get("/getreviews", getReviews);
+router.get("/getreviews/:noofrecords", getReviews);
+router.get("/getreviews/:noofrecords/:page", getReviews);
+// router.get("/getreviewsbyproductid/:productid");
 router.post("/addreview", authUser, addReviews);
-router.get("/getreviews/:productid", getReviewForProduct);
+router.patch("/updatereviewstatus/:id", updateReviewStatus);
+router.get("/getreviewsforproduct/:productid", getReviewForProduct);
 router.get("/getreviewsforuser", authLogin, getReviewsForUser);
+
+// add brands
+router.post("/addbrands", uploadBrandImage, addBrands);
+router.get("/getbrands", getBrands);
+router.get("/getbrand/:id", getBrandById);
+router.delete("/deletebrand/:id", deleteBrands);
 
 // testing
 
