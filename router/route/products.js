@@ -397,3 +397,33 @@ exports.searchProducts = async (req, res) => {
     return res.status(400).json({ message: `Error: ${error.message}` });
   }
 };
+
+exports.getOnSaleProducts = async (req, res) => {
+  try {
+    if (req.method !== "GET")
+      return res
+        .status(405)
+        .json({ message: `Method ${req.method} is not allowed` });
+
+    const { pid } = req.params;
+    const getData = await getDataWithImages(
+      req,
+      {
+        tablename: "products__list",
+        where: "on__sale=?",
+        data: ["1"],
+        orders: "create__date DESC",
+        limit: null,
+      },
+      {
+        imagetable: "product__images",
+      },
+      true
+    );
+    return res.status(200).json(getData);
+  } catch (error) {
+    return res
+      .status(400)
+      .json({ message: `Internal Server error: ${error.message}` });
+  }
+};

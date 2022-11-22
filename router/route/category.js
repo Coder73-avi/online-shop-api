@@ -143,3 +143,28 @@ exports.deleteCategory = async (req, res) => {
       .json({ message: `Internal Problems error: ${error.mesage}` });
   }
 };
+
+exports.getTopSellingCategorys = async (req, res) => {
+  try {
+    if (req.method !== "GET")
+      return res
+        .status(405)
+        .json({ message: `Method ${req.method} is not allowed !!!` });
+
+    const [orders, _0] = await Select("orders");
+    const categoryList = orders?.map((val) => val.category);
+    const newObj = {};
+
+    categoryList.forEach((name) => {
+      return (newObj[name] = (newObj[name] || 0) + 1);
+    });
+
+    const newCategoryList = Object.keys(newObj).sort(
+      (a, b) => newObj[b] - newObj[a]
+    );
+
+    return res.status(200).json(newCategoryList.slice(0, 6));
+  } catch (error) {
+    return res.status(400).json({ message: `Error: ${error.message}` });
+  }
+};

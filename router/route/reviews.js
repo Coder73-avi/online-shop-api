@@ -107,6 +107,7 @@ exports.getReviewForProduct = async (req, res) => {
 
     const { productid } = req.params;
     const [data, _0] = await Select("reviews", "product__id=?", [productid]);
+    if (data.length == 0) return res.status(200).json([]);
     const newData = [];
     for (let i = 0; i < data.length; i++) {
       const [user, __0] = await Select("users", "id=?", [data[i].user__id]);

@@ -23,6 +23,7 @@ const {
   topSellingProduct,
   getAllImages,
   searchProducts,
+  getOnSaleProducts,
 } = require("./route/products");
 const {
   signUp,
@@ -42,6 +43,7 @@ const {
   getCategorys,
   getCategoryById,
   deleteCategory,
+  getTopSellingCategorys,
 } = require("./route/category");
 const {
   addCheckOut,
@@ -110,6 +112,7 @@ router.route("/deleteproductimage/:id").delete(deteProductImage);
 router.route("/topsellingproduct").get(topSellingProduct);
 router.get("/getallimages", getAllImages);
 router.get("/searchproducts/:keywords", searchProducts);
+router.get("/getonsaleproducts", getOnSaleProducts);
 
 // orders
 router.post("/addorders", authUser, addOrder);
@@ -135,6 +138,7 @@ router.patch("/updatecategory/:id", uploadCategoryImage, updateCategory);
 router.route("/categorys").get(getCategorys);
 router.route("/category/:id").get(getCategoryById);
 router.route("/deletecategory/:id").delete(deleteCategory);
+router.get("/gettopsellingcategorys", getTopSellingCategorys);
 
 // checkout
 router.post("/addcheckout", authUser, addCheckOut);
