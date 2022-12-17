@@ -189,13 +189,27 @@ exports.getProductById = async (req, res) => {
         .status(405)
         .json({ message: `Method ${req.method} is not allowed` });
 
-    const { pid } = req.params;
+    let where ="";
+    let data = "";
+    
+    if(req.params.hasOwnProperty("pid")){
+      const { pid } = req.params;
+      where = "pid=?"
+      data = [pid]
+    }
+
+    if(req.params.hasOwnProperty("tablename")){
+      const {tablename, value} = req.params;
+      where = `${tablename} = ?`
+      data = [value]
+    }
+
     const getData = await getDataWithImages(
       req,
       {
         tablename: "products__list",
-        where: "pid=?",
-        data: [pid],
+        where,
+        data,
         orders: null,
         limit: null,
       },
@@ -262,7 +276,7 @@ exports.getProductImagesById = async (req, res) => {
   }
 };
 
-exports.deteProductImage = async (req, res) => {
+exports.deleteProductImage = async (req, res) => {
   try {
     if (req.method !== "DELETE")
       return res

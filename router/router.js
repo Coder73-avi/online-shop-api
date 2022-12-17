@@ -17,7 +17,7 @@ const {
   getProductImagesById,
   updateProduct,
   getProductsByCategory,
-  deteProductImage,
+  deleteProductImage,
   deleteProduct,
   totalProduct,
   topSellingProduct,
@@ -71,7 +71,7 @@ const {
   deleteWishlist,
 } = require("./route/wishlist");
 const { createProduct, uploadTestImage } = require("./route/testroute");
-const { productValidation } = require("../controller/produuctValidation");
+const { productValidation } = require("../controller/productValidation");
 const { getStaticData } = require("./route/staticData");
 const { getSalesChartData } = require("./route/salesChartData");
 const {
@@ -88,16 +88,40 @@ const {
   deleteBrands,
   getBrandById,
 } = require("./route/brands");
+const {
+  roomMakeOver,
+  updateRoomMakeOver,
+  getRoomMakeOver,
+  uploadImageOfRoomMakeOver,
+} = require("./route/room-make-over");
+const {
+  addBanner,
+  updateBanner,
+  getBanner,
+  uploadBannerImage,
+} = require("./route/banner");
+const {
+  uploadCommunityPostImages,
+  addNewCommunityPost,
+  getNewCommunityPost,
+  getCommunityPostByTbname,
+  updateNewCommunityPost,
+  deleteCommunityPostImage,
+  deleteCommunityPost,
+} = require("./route/ourcommunity");
+const { addCommunityOrder } = require("./route/communityorder");
 
 // products
 router.post("/addproduct", uploadProductImage, productValidation, addProduct);
 // router.route("/getproducts").get(getProducts);
+// router.get("/getproducts", getProducts)
 router.route("/getproducts").get(getProducts);
 router.route("/getproducts/:noofproduct").get(getProducts);
 router.route("/getproducts/:noofproduct/:page").get(getProducts);
 router.get("/totalproduct", totalProduct);
 
 router.route("/getproduct/:pid").get(getProductById);
+router.route("/getproduct/:tablename/:value").get(getProductById);
 router.patch(
   "/updateproduct/:id",
   productValidation,
@@ -108,7 +132,7 @@ router.patch(
 router.route("/deleteproduct/:pid").delete(deleteProduct);
 router.route("/getproductimages/:product__id").get(getProductImagesById);
 router.route("/getproductsbycategory/:category").get(getProductsByCategory);
-router.route("/deleteproductimage/:id").delete(deteProductImage);
+router.route("/deleteproductimage/:id").delete(deleteProductImage);
 router.route("/topsellingproduct").get(topSellingProduct);
 router.get("/getallimages", getAllImages);
 router.get("/searchproducts/:keywords", searchProducts);
@@ -185,7 +209,52 @@ router.get("/getbrands", getBrands);
 router.get("/getbrand/:id", getBrandById);
 router.delete("/deletebrand/:id", deleteBrands);
 
+// room-make-over
+router.get("/room-make-over/:type", getRoomMakeOver);
+router.post("/room-make-over", uploadImageOfRoomMakeOver, roomMakeOver);
+router.patch(
+  "/room-make-over/:type",
+  uploadImageOfRoomMakeOver,
+  updateRoomMakeOver
+);
+
+// our community
+router.post(
+  "/addcommunitypost",
+  authUser,
+  uploadCommunityPostImages,
+  addNewCommunityPost
+);
+router.patch(
+  "/updatecommunitypost/:pid",
+  authUser,
+  uploadCommunityPostImages,
+  updateNewCommunityPost
+);
+
+router.get("/getcommunitypost/:status", getNewCommunityPost);
+router.get(
+  "/getcommunitypostbytbnameforuser/:tbname/:value",
+  authUser,
+  getCommunityPostByTbname
+);
+router.get(
+  "/getcommunitypostbytbname/:tbname/:value",
+  getCommunityPostByTbname
+);
+router.delete(
+  "/deletecommunitypostimage/:id",
+  authUser,
+  deleteCommunityPostImage
+);
+router.delete("/deletecommunitypost/:pid", authUser, deleteCommunityPost);
+// community orders
+router.post("/sendcommunityorder", authUser, addCommunityOrder);
+
 // testing
+router.post("/addbanner", uploadBannerImage, addBanner);
+router.patch("/updatebanner/:type", uploadBannerImage, updateBanner);
+router.get("/getbanner/:type", getBanner);
 
 router.post("/testroute", uploadTestImage, productValidation, createProduct);
 

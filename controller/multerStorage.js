@@ -5,10 +5,14 @@ exports.storage = (dest) => {
   return multer.diskStorage({
     destination: (req, file, cb) => cb(null, dest),
     filename: (req, file, cb) => {
+      const videoType = [".mp4", ".mkv", ".avi", ".mov", ".wmv", ".webm"];
       const name = file.fieldname;
       const newDate = Date.now();
       const extn = path.extname(file.originalname);
-      const filename = name + newDate + extn;
+      let filename = name + newDate + extn;
+      if (videoType.includes(extn.toLowerCase())) {
+        filename = "main-ads-video" + extn;
+      }
       return cb(null, filename);
     },
   });
